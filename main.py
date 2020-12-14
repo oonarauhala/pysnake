@@ -1,13 +1,27 @@
 import pygame
+from random import randint
+
 class Player:
     def __init__(self):
-        # Init player starting position, size, colour and speed
+        # Init player starting status
         self.speed = 1
         self.direction = "right"
+        self.score = 0
         self.player_colour = (255, 255, 255)
         self.p_x, self.p_y = 100, 250
         self.p_width, self.p_height = 10, 10
 
+class Treat:
+    def __init__(self):
+        self.treat_colour = (255, 0, 0)
+        self.t_width, self.t_height = 5, 5
+        self.t_x = self.throw_treat()
+        self.t_y = self.throw_treat()
+
+    def throw_treat(self):
+        self.t_x = randint(0,500)
+        self.t_y = randint(0,500)
+    
 class Snake:
     # Init game
     def __init__(self):
@@ -15,6 +29,12 @@ class Snake:
 
         # Init player
         self.player = Player()
+
+        # Init first treat
+        self.treat = Treat()
+        self.treat.throw_treat()
+        print("Treat coordinates:")
+        print(self.treat.t_x, self.treat.t_y)
 
         # Init screen size and colour
         self.screen = pygame.display.set_mode((500, 500))
@@ -47,7 +67,10 @@ class Snake:
     # Draw screen
     def draw(self):
         self.screen.fill(self.screen_colour)
+        # Player
         pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.p_x, self.player.p_y, self.player.p_width, self.player.p_height))
+        # Treat
+        pygame.draw.rect(self.screen, self.treat.treat_colour, pygame.Rect(pygame.Rect(self.treat.t_x, self.treat.t_y, self.treat.t_width, self.treat.t_height)))
         pygame.display.flip()
             
     # Check for events & react
