@@ -33,12 +33,11 @@ class Snake:
         # Init first treat
         self.treat = Treat()
         self.treat.throw_treat()
-        print("Treat coordinates:")
-        print(self.treat.t_x, self.treat.t_y)
 
         # Init screen size and colour
         self.screen = pygame.display.set_mode((500, 500))
         self.screen_colour = (0, 0, 0)
+        pygame.display.set_caption("PySnake")
         self.screen_max_width = self.screen.get_width() - self.player.p_width
         self.screen_max_height = self.screen.get_height() - self.player.p_height
 
