@@ -13,12 +13,14 @@ class Snake:
     def __init__(self):
         pygame.init()
 
+        # Init player
+        self.player = Player()
+
         # Init screen size and colour
         self.screen = pygame.display.set_mode((500, 500))
         self.screen_colour = (0, 0, 0)
-
-        # Init player
-        self.player = Player()
+        self.screen_max_width = self.screen.get_width() - self.player.p_width
+        self.screen_max_height = self.screen.get_height() - self.player.p_height
 
         # Start main loop
         self.main_loop()
@@ -31,14 +33,15 @@ class Snake:
             self.draw()
             clock.tick(60)
             
+    # Change player coordinates
     def move(self):
-        if self.player.direction == "right":
+        if self.player.direction == "right" and self.player.p_x <= self.screen_max_width:
             self.player.p_x += self.player.speed
-        if self.player.direction == "left":
+        if self.player.direction == "left" and self.player.p_x >= 0:
             self.player.p_x -= self.player.speed
-        if self.player.direction == "up":
+        if self.player.direction == "up" and self.player.p_y >= 0:
             self.player.p_y -= self.player.speed
-        if self.player.direction == "down":
+        if self.player.direction == "down" and self.player.p_y <= self.screen_max_height:
             self.player.p_y += self.player.speed
 
     # Draw screen
