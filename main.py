@@ -26,6 +26,7 @@ class Snake:
     # Init game
     def __init__(self):
         pygame.init()
+        self.game_end = False
 
         # Init player
         self.player = Player()
@@ -44,6 +45,9 @@ class Snake:
         # Start main loop
         self.main_loop()
 
+        # Game over
+        self.end()
+
     def main_loop(self):
         clock = pygame.time.Clock()
         while True:
@@ -51,8 +55,35 @@ class Snake:
             self.move()
             self.draw()
             self.collision(self.player_rect, self.treat_rect)
+            self.check_boundaries()
             clock.tick(60)
-            
+            if self.game_end:
+                break
+        
+    def end(self):
+        flash = True
+        clock = pygame.time.Clock()
+        self.screen.fill(self.screen_colour)
+        # init game over -text
+        self.font = pygame.font.SysFont("Arial", 50)
+        game_over_text_red = self.font.render("GAME OVER!", True, (255, 0, 0))
+        game_over_text_white = self.font.render("GAME OVER!", True, (255, 255, 255))
+        game_over_position = (80, 10)
+        while True:
+            # Look for events
+            self.event()
+            if flash:
+                self.screen.blit(game_over_text_white, game_over_position)
+                pygame.display.flip()
+                flash = False
+                clock.tick(10)
+            else:
+                self.screen.blit(game_over_text_red, game_over_position)
+                pygame.display.flip()
+                flash = True
+                clock.tick(10)
+
+
     # Change player coordinates
     def move(self):
         if self.player.direction == "right" and self.player.p_x <= self.screen_max_width:
@@ -63,6 +94,17 @@ class Snake:
             self.player.p_y -= self.player.speed
         if self.player.direction == "down" and self.player.p_y <= self.screen_max_height:
             self.player.p_y += self.player.speed
+    
+    # End game if player touches the boundaries
+    def check_boundaries(self):
+        if self.player.p_x >= self.screen_max_width:
+            self.game_end = True
+        elif self.player.p_x <= 0:
+            self.game_end = True
+        elif self.player.p_y <= 0:
+            self.game_end = True
+        elif self.player.p_y >= self.screen_max_height:
+            self.game_end = True
 
     # Draw screen
     def draw(self):
