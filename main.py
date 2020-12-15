@@ -50,6 +50,7 @@ class Snake:
             self.event()
             self.move()
             self.draw()
+            self.collision(self.player_rect, self.treat_rect)
             clock.tick(60)
             
     # Change player coordinates
@@ -67,10 +68,16 @@ class Snake:
     def draw(self):
         self.screen.fill(self.screen_colour)
         # Player
-        pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.p_x, self.player.p_y, self.player.p_width, self.player.p_height))
+        self.player_rect = pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.p_x, self.player.p_y, self.player.p_width, self.player.p_height))
         # Treat
-        pygame.draw.rect(self.screen, self.treat.treat_colour, pygame.Rect(pygame.Rect(self.treat.t_x, self.treat.t_y, self.treat.t_width, self.treat.t_height)))
+        self.treat_rect = pygame.draw.rect(self.screen, self.treat.treat_colour, pygame.Rect(pygame.Rect(self.treat.t_x, self.treat.t_y, self.treat.t_width, self.treat.t_height)))
         pygame.display.flip()
+
+    # Check & react to collision with treat
+    def collision(self, player, treat):
+        if self.player_rect.colliderect(treat) == 1:
+            self.treat.throw_treat()
+
             
     # Check for events & react
     def event(self):
