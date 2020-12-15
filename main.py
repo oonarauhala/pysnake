@@ -5,6 +5,7 @@ class Player:
     def __init__(self):
         # Init player starting status
         self.speed = 1
+        self.length = 1
         self.direction = "right"
         self.score = 0
         self.player_colour = (255, 255, 255)
@@ -50,15 +51,13 @@ class Snake:
 
     def main_loop(self):
         clock = pygame.time.Clock()
-        while True:
+        while not self.game_end:
             self.event()
             self.move()
             self.draw()
             self.collision(self.player_rect, self.treat_rect)
             self.check_boundaries()
             clock.tick(60)
-            if self.game_end:
-                break
         
     def end(self):
         flash = True
