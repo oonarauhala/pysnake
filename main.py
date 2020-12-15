@@ -19,8 +19,8 @@ class Treat:
         self.t_y = self.throw_treat()
 
     def throw_treat(self):
-        self.t_x = randint(0,500)
-        self.t_y = randint(0,500)
+        self.t_x = randint(0, 495)
+        self.t_y = randint(0, 495)
     
 class Snake:
     # Init game
@@ -134,6 +134,8 @@ class Snake:
         if self.player_rect.colliderect(treat) == 1:
             self.treat.throw_treat()
             self.player.score += 1
+            # Increase speed
+            self.player.speed += 0.25
 
             
     # Check for events & react
