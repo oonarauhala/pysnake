@@ -71,12 +71,19 @@ class Snake:
         self.player_rect = pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.p_x, self.player.p_y, self.player.p_width, self.player.p_height))
         # Treat
         self.treat_rect = pygame.draw.rect(self.screen, self.treat.treat_colour, pygame.Rect(pygame.Rect(self.treat.t_x, self.treat.t_y, self.treat.t_width, self.treat.t_height)))
+        # Score
+        self.font = pygame.font.SysFont("Arial", 15)
+        score_colour = (255, 255, 255)
+        score_position = (5, 5)
+        score_text = self.font.render(" Score: "+ str(self.player.score), True, score_colour)
+        self.screen.blit(score_text, score_position)
         pygame.display.flip()
 
     # Check & react to collision with treat
     def collision(self, player, treat):
         if self.player_rect.colliderect(treat) == 1:
             self.treat.throw_treat()
+            self.player.score += 1
 
             
     # Check for events & react
