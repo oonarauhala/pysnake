@@ -64,21 +64,29 @@ class Snake:
         flash = True
         clock = pygame.time.Clock()
         self.screen.fill(self.screen_colour)
+
         # init game over -text
         self.font = pygame.font.SysFont("Arial", 50)
         game_over_text_red = self.font.render("GAME OVER!", True, (255, 0, 0))
         game_over_text_white = self.font.render("GAME OVER!", True, (255, 255, 255))
-        game_over_position = (80, 10)
+        game_over_position = (80, 50)
+
+        # init end score -text
+        self.scorefont = pygame.font.SysFont("Arial", 28)
+        score_position = (220, 250)
+
         while True:
             # Look for events
             self.event()
             if flash:
                 self.screen.blit(game_over_text_white, game_over_position)
+                self.screen.blit(self.score_text, score_position)
                 pygame.display.flip()
                 flash = False
                 clock.tick(10)
             else:
                 self.screen.blit(game_over_text_red, game_over_position)
+                self.screen.blit(self.score_text, score_position)
                 pygame.display.flip()
                 flash = True
                 clock.tick(10)
@@ -117,8 +125,8 @@ class Snake:
         self.font = pygame.font.SysFont("Arial", 15)
         score_colour = (255, 255, 255)
         score_position = (5, 5)
-        score_text = self.font.render(" Score: "+ str(self.player.score), True, score_colour)
-        self.screen.blit(score_text, score_position)
+        self.score_text = self.font.render(" Score: "+ str(self.player.score), True, score_colour)
+        self.screen.blit(self.score_text, score_position)
         pygame.display.flip()
 
     # Check & react to collision with treat
