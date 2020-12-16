@@ -5,7 +5,8 @@ class Player:
     def __init__(self):
         # Init player starting status
         self.speed = 1
-        self.length = 3
+        self.length = 10
+        self.increment = 5
         self.direction = "right"
         self.score = 0
         self.player_colour = (255, 255, 255)
@@ -13,14 +14,13 @@ class Player:
         self.p_width, self.p_height = 10, 10
         self.coordinates = []
     
-    # Coordinates holds 10 last known coordinates
+    # Stores last known coordinates in self.coordinates according to self.length
     def update_coordinates(self, coordinates: tuple):
-        if len(self.coordinates) < 10:
+        if len(self.coordinates) < self.length:
             self.coordinates.append(coordinates)
         else:
             self.coordinates.append(coordinates)
-            self.coordinates = self.coordinates[-10:-1]
-        #print(self.coordinates)
+            self.coordinates = self.coordinates[-self.length:-1]
 
 class Treat:
     def __init__(self):
@@ -140,17 +140,17 @@ class Snake:
         self.screen.blit(self.score_text, score_position)
         pygame.display.flip()
 
+    # Draw player tail
     def draw_tail(self):
         for i in range(len(self.player.coordinates)):
-            x = self.player.coordinates[i][0]
-            y = self.player.coordinates[i][1]
-            pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(x, y, self.player.p_width, self.player.p_height))
+            pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.coordinates[i][0], self.player.coordinates[i][1], self.player.p_width, self.player.p_height))
 
     # Check & react to collision with treat
     def collision(self, player, treat):
         if self.player_rect.colliderect(treat) == 1:
             self.treat.throw_treat()
             self.player.score += 1
+            self.player.length += self.player.increment
             # Increase speed
             self.player.speed += 0.25
 
