@@ -73,30 +73,43 @@ class Snake:
     def end(self):
         flash = True
         clock = pygame.time.Clock()
-        self.screen.fill(self.screen_colour)
 
-        # init game over -text
+        # Init game over -text
         self.font = pygame.font.SysFont("Arial", 50)
         game_over_text_red = self.font.render("GAME OVER!", True, (255, 0, 0))
         game_over_text_white = self.font.render("GAME OVER!", True, (255, 255, 255))
         game_over_position = (80, 50)
 
-        # init end score -text
+        # Init end score -text
         self.scorefont = pygame.font.SysFont("Arial", 28)
-        score_position = (220, 250)
+        score_position = (210, 250)
+
+        # Init quit -text
+        self.quit_newgame_font = pygame.font.SysFont("Arial", 15)
+        quit_text = self.quit_newgame_font.render("Press ESC to quit", True, (255, 255, 255))
+        quit_text_position = (50, 400)
+
+        # Init new game -text
+        newgame_text = self.quit_newgame_font.render("Press SPACE to try again", True, (255, 255, 255))
+        newgame_text_position = (300, 400)
 
         while True:
             # Look for events
             self.event()
+            self.screen.fill(self.screen_colour)
             if flash:
                 self.screen.blit(game_over_text_white, game_over_position)
                 self.screen.blit(self.score_text, score_position)
+                self.screen.blit(quit_text, quit_text_position)
+                self.screen.blit(newgame_text, newgame_text_position)
                 pygame.display.flip()
                 flash = False
                 clock.tick(10)
             else:
                 self.screen.blit(game_over_text_red, game_over_position)
                 self.screen.blit(self.score_text, score_position)
+                self.screen.blit(quit_text, quit_text_position)
+                self.screen.blit(newgame_text, newgame_text_position)
                 pygame.display.flip()
                 flash = True
                 clock.tick(10)
@@ -150,6 +163,7 @@ class Snake:
         if self.player_rect.colliderect(treat) == 1:
             self.treat.throw_treat()
             self.player.score += 1
+            # Increase player length
             self.player.length += self.player.increment
             # Increase speed
             self.player.speed += 0.25
@@ -169,6 +183,10 @@ class Snake:
                         self.player.direction = "left"
                     if event.key == pygame.K_DOWN:
                         self.player.direction = "down"
+                    if event.key == pygame.K_ESCAPE:
+                        exit()
+                    if event.key == pygame.K_SPACE:
+                        Snake()
 
 
 Snake()
