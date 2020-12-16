@@ -5,12 +5,22 @@ class Player:
     def __init__(self):
         # Init player starting status
         self.speed = 1
-        self.length = 1
+        self.length = 3
         self.direction = "right"
         self.score = 0
         self.player_colour = (255, 255, 255)
         self.p_x, self.p_y = 100, 250
         self.p_width, self.p_height = 10, 10
+        self.coordinates = []
+    
+    # Coordinates holds 10 last known coordinates
+    def update_coordinates(self, coordinates: tuple):
+        if len(self.coordinates) < 10:
+            self.coordinates.append(coordinates)
+        else:
+            self.coordinates.append(coordinates)
+            self.coordinates = self.coordinates[-10:-1]
+        #print(self.coordinates)
 
 class Treat:
     def __init__(self):
@@ -57,6 +67,7 @@ class Snake:
             self.draw()
             self.collision(self.player_rect, self.treat_rect)
             self.check_boundaries()
+            self.player.update_coordinates((self.player.p_x, self.player.p_y))
             clock.tick(60)
         
     def end(self):
@@ -118,6 +129,7 @@ class Snake:
         self.screen.fill(self.screen_colour)
         # Player
         self.player_rect = pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.p_x, self.player.p_y, self.player.p_width, self.player.p_height))
+        self.draw_tail()
         # Treat
         self.treat_rect = pygame.draw.rect(self.screen, self.treat.treat_colour, pygame.Rect(pygame.Rect(self.treat.t_x, self.treat.t_y, self.treat.t_width, self.treat.t_height)))
         # Score
@@ -127,6 +139,12 @@ class Snake:
         self.score_text = self.font.render(" Score: "+ str(self.player.score), True, score_colour)
         self.screen.blit(self.score_text, score_position)
         pygame.display.flip()
+
+    def draw_tail(self):
+        for i in range(len(self.player.coordinates)):
+            x = self.player.coordinates[i][0]
+            y = self.player.coordinates[i][1]
+            pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(x, y, self.player.p_width, self.player.p_height))
 
     # Check & react to collision with treat
     def collision(self, player, treat):
