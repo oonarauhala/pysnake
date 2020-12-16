@@ -38,8 +38,6 @@ class Snake:
     def __init__(self):
         pygame.init()
         self.game_end = False
-        # List of rects making the sanke tail
-        self.snake_tail = []
 
         # Init player
         self.player = Player()
@@ -68,7 +66,6 @@ class Snake:
             self.move()
             self.draw()
             self.collision(self.player_rect, self.treat_rect)
-            self.check_tail_collision()
             self.check_boundaries()
             self.player.update_coordinates((self.player.p_x, self.player.p_y))
             clock.tick(60)
@@ -158,16 +155,8 @@ class Snake:
 
     # Draw player tail
     def draw_tail(self):
-        self.snake_tail = []
         for i in range(len(self.player.coordinates)):
-            rect = pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.coordinates[i][0], self.player.coordinates[i][1], self.player.p_width, self.player.p_height))
-            self.snake_tail.append(rect)
-    
-    # Check for collision with tail
-    def check_tail_collision(self):
-        for tail_rect in self.snake_tail:
-            if self.player_rect.colliderect(tail_rect) == 1:
-                self.game_end = True
+            pygame.draw.rect(self.screen, self.player.player_colour, pygame.Rect(self.player.coordinates[i][0], self.player.coordinates[i][1], self.player.p_width, self.player.p_height))
 
     # Check & react to collision with treat
     def collision(self, player, treat):
@@ -201,6 +190,5 @@ class Snake:
 
 
 Snake()
-
 
 
